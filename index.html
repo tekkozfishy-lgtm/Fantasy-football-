@@ -240,6 +240,7 @@ input:focus,select:focus{border-color:var(--green)}
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:30px 0;
 }
 
 .setup-box{width:min(480px,100%)}
@@ -289,6 +290,36 @@ input:focus,select:focus{border-color:var(--green)}
   font-size:12px;
   line-height:1.5;
   margin-top:12px;
+}
+
+.code-box{
+  background:#07110d;
+  border:1px solid #28513d;
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+  margin:15px 0;
+}
+
+.code-label{
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:8px;
+}
+
+.manager-code{
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:3px;
+  color:var(--green);
+  word-break:break-all;
+}
+
+.code-warning{
+  color:#ffd75e;
+  font-size:12px;
+  line-height:1.5;
+  margin-top:10px;
 }
 
 .hero{
@@ -590,11 +621,19 @@ input:focus,select:focus{border-color:var(--green)}
   main{padding-bottom:90px}
 
   .hero h1{font-size:29px}
+
+  .manager-code{
+    font-size:20px;
+  }
 }
 </style>
 </head>
 
 <body>
+
+<!-- =========================================================
+     SETUP / MANAGER CODE LOGIN
+========================================================= -->
 
 <section id="setupPage" class="setup">
 
@@ -610,37 +649,39 @@ Fantasy football. Your team. Your league.
 
 <div class="auth-tabs">
 
-<button id="loginTab" class="auth-tab active" onclick="showAuth('login')">
-Log In
+<button
+  id="loginTab"
+  class="auth-tab active"
+  onclick="showAuth('login')">
+  Enter Code
 </button>
 
-<button id="signupTab" class="auth-tab" onclick="showAuth('signup')">
-Create Account
+<button
+  id="signupTab"
+  class="auth-tab"
+  onclick="showAuth('signup')">
+  New Manager
 </button>
 
 </div>
 
 <div id="authMessage"></div>
 
+
+<!-- LOGIN -->
+
 <div id="loginPanel" class="auth-panel active">
 
 <div class="form-group">
-<label>Username</label>
+
+<label>Manager Code</label>
 
 <input
-  id="loginUsername"
-  placeholder="Enter username"
-  autocomplete="username">
-</div>
+  id="loginCode"
+  placeholder="e.g. FXI-7A42B9"
+  autocomplete="off"
+  autocapitalize="characters">
 
-<div class="form-group">
-<label>Password</label>
-
-<input
-  id="loginPassword"
-  type="password"
-  placeholder="Enter password"
-  autocomplete="current-password">
 </div>
 
 <button
@@ -648,49 +689,40 @@ Create Account
   style="width:100%"
   onclick="loginManager()">
 
-Log In
+Enter FantasyXI
 
 </button>
 
+<div class="note">
+Your manager code is your login. Keep it safe because anyone with the code can access the team.
 </div>
+
+</div>
+
+
+<!-- CREATE -->
 
 <div id="signupPanel" class="auth-panel">
 
 <div class="form-group">
-<label>Username</label>
+
+<label>Manager Name</label>
 
 <input
-  id="signupUsername"
-  placeholder="Choose a username"
-  autocomplete="username">
+  id="signupManagerName"
+  placeholder="e.g. Ben"
+  autocomplete="name">
+
 </div>
 
 <div class="form-group">
-<label>Password</label>
 
-<input
-  id="signupPassword"
-  type="password"
-  placeholder="Choose a password"
-  autocomplete="new-password">
-</div>
-
-<div class="form-group">
-<label>Confirm Password</label>
-
-<input
-  id="signupConfirm"
-  type="password"
-  placeholder="Repeat password"
-  autocomplete="new-password">
-</div>
-
-<div class="form-group">
 <label>Team Name</label>
 
 <input
   id="signupTeam"
   placeholder="e.g. Ben FC">
+
 </div>
 
 <button
@@ -698,13 +730,12 @@ Log In
   style="width:100%"
   onclick="signupManager()">
 
-Create Account
+Create My Team
 
 </button>
 
 <div class="note">
-Your username is your FantasyXI login.
-No email is shown or required.
+You won't need an email address or password. FantasyXI will generate a unique manager code for you.
 </div>
 
 </div>
@@ -713,6 +744,10 @@ No email is shown or required.
 </div>
 </section>
 
+
+<!-- =========================================================
+     MAIN APP
+========================================================= -->
 
 <div id="app" class="hidden">
 
@@ -738,6 +773,7 @@ Fantasy<span>XI</span>
 
 </div>
 </header>
+
 
 <nav class="desktop-nav">
 
@@ -773,9 +809,13 @@ League
 </div>
 </nav>
 
+
 <main>
 
 <div class="container">
+
+
+<!-- HOME -->
 
 <section id="homePage" class="page active">
 
@@ -847,6 +887,8 @@ Gameweek 1 is currently active. Select your squad and check the Players section 
 
 </section>
 
+
+<!-- TEAM -->
 
 <section id="teamPage" class="page">
 
@@ -937,6 +979,8 @@ Your 13-player FantasyXI squad.
 </section>
 
 
+<!-- TRANSFERS -->
+
 <section id="transfersPage" class="page">
 
 <div class="page-title">
@@ -1000,6 +1044,8 @@ Build your squad using the available players.
 
 </section>
 
+
+<!-- PLAYERS -->
 
 <section id="playersPage" class="page">
 
@@ -1072,6 +1118,8 @@ View all available FantasyXI players.
 
 </section>
 
+
+<!-- LEAGUE -->
 
 <section id="leaguePage" class="page">
 
@@ -1152,6 +1200,8 @@ Join League
 
 </section>
 
+
+<!-- ADMIN -->
 
 <section id="adminPage" class="page">
 
@@ -1267,7 +1317,11 @@ Add Player
 </section>
 
 </div>
+
 </main>
+
+
+<!-- MOBILE NAV -->
 
 <div class="mobile-nav">
 
@@ -1312,34 +1366,10 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_n4NTUJ53pk887hZ-6T2jZg_lG2LEc2u";
 
-
 const supabaseClient =
 window.supabase.createClient(
   SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      storageKey:"fantasyxi-manager-auth",
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
-);
-
-
-const adminClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      storageKey:"fantasyxi-admin-auth",
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
+  SUPABASE_KEY
 );
 
 
@@ -1355,39 +1385,22 @@ let squadPlayers=[];
 let currentGameweek=null;
 let teamListView=false;
 
+const MANAGER_CODE_STORAGE =
+"fantasyxi_manager_code";
+
 
 /* =========================================================
-   AUTH HELPERS
+   GENERAL HELPERS
 ========================================================= */
 
-function normalizeUsername(value){
+function escapeHtml(value){
 
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g,"");
-
-}
-
-
-/*
-  FantasyXI only displays usernames.
-
-  Supabase email/password authentication still requires
-  an email-shaped identifier internally.
-
-  example.com is a reserved example domain.
-  It is NOT shown to users and FantasyXI does not send
-  messages to these addresses.
-
-  IMPORTANT:
-  Supabase Email Confirmation must remain OFF.
-*/
-
-function usernameEmail(username){
-
-  return normalizeUsername(username)
-    + "@example.com";
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
@@ -1398,7 +1411,8 @@ function showMessage(
   type="error"
 ){
 
-  const el=document.getElementById(elementId);
+  const el=
+    document.getElementById(elementId);
 
   if(!el)return;
 
@@ -1412,21 +1426,72 @@ function showMessage(
 
 function clearMessage(elementId){
 
-  const el=document.getElementById(elementId);
+  const el=
+    document.getElementById(elementId);
 
   if(el)el.innerHTML="";
 
 }
 
 
-function escapeHtml(value){
+/*
+  Supabase RPC helper.
 
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  Every FantasyXI database action now goes
+  through fxi_manager_action().
+*/
+
+async function managerAction(
+  action,
+  code=null,
+  payload={}
+){
+
+  const {
+    data,
+    error
+  }=
+    await supabaseClient.rpc(
+      "fxi_manager_action",
+      {
+        p_action:action,
+        p_code:code,
+        p_payload:payload
+      }
+    );
+
+
+  if(error){
+
+    console.error(
+      "FantasyXI RPC error:",
+      error
+    );
+
+    throw error;
+
+  }
+
+
+  return data;
+
+}
+
+
+/*
+  The RPC returns JSON.
+
+  This helper makes the frontend tolerant of
+  slightly different response shapes.
+*/
+
+function responseData(data){
+
+  if(data===null || data===undefined){
+    return {};
+  }
+
+  return data;
 
 }
 
@@ -1471,29 +1536,18 @@ function showAuth(type){
 
 
 /* =========================================================
-   SIGN UP
+   CREATE MANAGER
 ========================================================= */
 
 async function signupManager(){
 
   clearMessage("authMessage");
 
-  const username=
-    normalizeUsername(
-      document
-        .getElementById("signupUsername")
-        .value
-    );
-
-  const password=
+  const managerName=
     document
-      .getElementById("signupPassword")
-      .value;
-
-  const confirm=
-    document
-      .getElementById("signupConfirm")
-      .value;
+      .getElementById("signupManagerName")
+      .value
+      .trim();
 
   const teamName=
     document
@@ -1502,55 +1556,22 @@ async function signupManager(){
       .trim();
 
 
-  if(!username){
+  if(!managerName){
 
     showMessage(
       "authMessage",
-      "Please enter a username."
+      "Please enter your manager name."
     );
 
     return;
   }
 
 
-  if(username.length<3){
+  if(managerName.length<2){
 
     showMessage(
       "authMessage",
-      "Username must be at least 3 characters."
-    );
-
-    return;
-  }
-
-
-  if(!/^[a-z0-9_]+$/.test(username)){
-
-    showMessage(
-      "authMessage",
-      "Username can only contain letters, numbers and underscores."
-    );
-
-    return;
-  }
-
-
-  if(!password || password.length<6){
-
-    showMessage(
-      "authMessage",
-      "Password must be at least 6 characters."
-    );
-
-    return;
-  }
-
-
-  if(password!==confirm){
-
-    showMessage(
-      "authMessage",
-      "Passwords do not match."
+      "Manager name must be at least 2 characters."
     );
 
     return;
@@ -1568,244 +1589,268 @@ async function signupManager(){
   }
 
 
-  const email=usernameEmail(username);
+  if(teamName.length<2){
+
+    showMessage(
+      "authMessage",
+      "Team name must be at least 2 characters."
+    );
+
+    return;
+  }
+
+
+  const button=
+    document.querySelector(
+      "#signupPanel .btn-primary"
+    );
+
+
+  if(button){
+
+    button.disabled=true;
+    button.textContent="Creating...";
+
+  }
 
 
   try{
 
-    /*
-      Check the FantasyXI profile table first.
-      This prevents duplicate usernames.
-    */
-
-    const {
-      data:existingProfile,
-      error:profileCheckError
-    }=
-      await supabaseClient
-        .from("profiles")
-        .select("id")
-        .eq("username",username)
-        .maybeSingle();
-
-
-    if(profileCheckError){
-
-      console.error(
-        "Username check error:",
-        profileCheckError
-      );
-
-    }
-
-
-    if(existingProfile){
-
-      showMessage(
-        "authMessage",
-        "That username is already taken."
-      );
-
-      return;
-    }
-
-
-    /*
-      Create Supabase Auth account.
-
-      Email confirmation MUST be OFF in Supabase.
-      Otherwise Supabase will wait for confirmation.
-    */
-
-    const {
-      data,
-      error
-    }=
-      await supabaseClient.auth.signUp({
-
-        email:email,
-
-        password:password,
-
-        options:{
-          data:{
-            username:username
-          }
+    const data=
+      await managerAction(
+        "create_manager",
+        null,
+        {
+          manager_name:managerName,
+          team_name:teamName
         }
-
-      });
-
-
-    if(error){
-
-      console.error(
-        "Supabase signup error:",
-        error
       );
 
 
-      const errorText=
-        String(error.message || "").toLowerCase();
+    const result=
+      responseData(data);
 
 
-      if(
-        errorText.includes("rate limit") ||
-        errorText.includes("email rate limit")
-      ){
+    /*
+      Expected response:
 
-        showMessage(
-          "authMessage",
-          "Supabase has temporarily rate-limited account creation. Do not keep retrying — wait for the limit to clear, then try again."
-        );
-
-      }else if(
-        errorText.includes("already registered") ||
-        errorText.includes("already been registered")
-      ){
-
-        showMessage(
-          "authMessage",
-          "That username is already taken."
-        );
-
-      }else{
-
-        showMessage(
-          "authMessage",
-          error.message
-        );
-
+      {
+        manager:{...},
+        squad:{...},
+        manager_code:"FXI-..."
       }
 
-
-      return;
-    }
-
-
-    if(!data?.user){
-
-      showMessage(
-        "authMessage",
-        "Account could not be created."
-      );
-
-      return;
-    }
-
-
-    const user=data.user;
-
-
-    /*
-      Because Email Confirmation is OFF,
-      a session should normally be returned here.
+      We also support code nested in manager.
     */
 
-    if(!data.session){
-
-      showMessage(
-        "authMessage",
-        "The account was created, but Supabase did not return a session. Make sure Email Confirmation is OFF in Authentication → Providers → Email."
-      );
-
-      return;
-    }
+    const manager=
+      result.manager ||
+      result.account ||
+      result;
 
 
-    /*
-      Create the FantasyXI profile.
-    */
-
-    const {
-      error:profileError
-    }=
-      await supabaseClient
-        .from("profiles")
-        .insert({
-
-          id:user.id,
-
-          username:username,
-
-          display_name:username,
-
-          is_admin:false
-
-        });
+    const squad=
+      result.squad ||
+      result.team ||
+      null;
 
 
-    if(profileError){
+    const managerCode=
+      result.manager_code ||
+      manager?.manager_code ||
+      result.code;
+
+
+    if(!managerCode){
 
       console.error(
-        "Profile creation error:",
-        profileError
+        "Unexpected create_manager response:",
+        data
       );
 
-
-      showMessage(
-        "authMessage",
-        "Your login account was created, but your FantasyXI profile could not be created: "
-        + profileError.message
+      throw new Error(
+        "The manager was created but no manager code was returned."
       );
 
-      return;
     }
+
+
+    currentUser=
+      manager;
+
+    currentProfile=
+      manager;
+
+    currentSquad=
+      squad;
+
+
+    localStorage.setItem(
+      MANAGER_CODE_STORAGE,
+      managerCode
+    );
 
 
     /*
-      Create the initial FantasyXI squad.
+      Show the newly generated code before
+      entering the main app.
     */
 
-    const {
-      error:squadError
-    }=
-      await supabaseClient
-        .from("squads")
-        .insert({
+    document.getElementById(
+      "setupPage"
+    ).innerHTML=`
 
-          user_id:user.id,
+      <div class="setup-box">
 
-          name:teamName,
+        <div class="setup-logo">
+          FantasyXI
+        </div>
 
-          budget:55
+        <div class="setup-sub">
+          Your FantasyXI team is ready.
+        </div>
 
-        });
+        <div class="card">
+
+          <h2 style="text-align:center;margin-bottom:8px">
+            Manager Created
+          </h2>
+
+          <p style="text-align:center;color:var(--muted)">
+            ${escapeHtml(managerName)} · ${escapeHtml(teamName)}
+          </p>
+
+          <div class="code-box">
+
+            <div class="code-label">
+              YOUR MANAGER CODE
+            </div>
+
+            <div class="manager-code">
+              ${escapeHtml(managerCode)}
+            </div>
+
+            <div class="code-warning">
+              Save this code. It is your login and is required to access your team on another device.
+            </div>
+
+          </div>
+
+          <button
+            class="btn btn-secondary"
+            style="width:100%;margin-bottom:10px"
+            onclick="copyManagerCode('${escapeHtml(managerCode)}')">
+
+            Copy Manager Code
+
+          </button>
+
+          <button
+            class="btn btn-primary"
+            style="width:100%"
+            onclick="finishManagerCreation()">
+
+            Enter FantasyXI
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
 
 
-    if(squadError){
-
-      console.error(
-        "Squad creation error:",
-        squadError
-      );
-
-
-      showMessage(
-        "authMessage",
-        "Your account was created, but your team could not be created: "
-        + squadError.message
-      );
-
-      return;
-    }
-
-
-    currentUser=user;
-
-    await loadUser();
+    window.pendingCreatedManager={
+      manager,
+      squad,
+      managerCode
+    };
 
 
   }catch(error){
 
     console.error(
-      "Signup exception:",
+      "Create manager error:",
       error
     );
 
 
     showMessage(
       "authMessage",
-      "Something went wrong creating the account."
+      error.message ||
+      "Something went wrong creating your manager."
+    );
+
+
+  }finally{
+
+    if(button){
+
+      button.disabled=false;
+      button.textContent="Create My Team";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   FINISH CREATE
+========================================================= */
+
+async function finishManagerCreation(){
+
+  const pending=
+    window.pendingCreatedManager;
+
+
+  if(!pending){
+
+    location.reload();
+
+    return;
+  }
+
+
+  currentUser=
+    pending.manager;
+
+  currentProfile=
+    pending.manager;
+
+  currentSquad=
+    pending.squad;
+
+
+  await loadUser();
+
+
+  window.pendingCreatedManager=null;
+
+}
+
+
+/* =========================================================
+   COPY CODE
+========================================================= */
+
+async function copyManagerCode(code){
+
+  try{
+
+    await navigator.clipboard.writeText(code);
+
+    alert(
+      "Manager code copied."
+    );
+
+  }catch(error){
+
+    alert(
+      "Your manager code is:\n\n"+code
     );
 
   }
@@ -1814,31 +1859,26 @@ async function signupManager(){
 
 
 /* =========================================================
-   LOGIN
+   LOGIN WITH MANAGER CODE
 ========================================================= */
 
 async function loginManager(){
 
   clearMessage("authMessage");
 
-  const username=
-    normalizeUsername(
-      document
-        .getElementById("loginUsername")
-        .value
-    );
-
-  const password=
+  const code=
     document
-      .getElementById("loginPassword")
-      .value;
+      .getElementById("loginCode")
+      .value
+      .trim()
+      .toUpperCase();
 
 
-  if(!username || !password){
+  if(!code){
 
     showMessage(
       "authMessage",
-      "Enter your username and password."
+      "Enter your manager code."
     );
 
     return;
@@ -1847,37 +1887,60 @@ async function loginManager(){
 
   try{
 
-    const {
-      data,
-      error
-    }=
-      await supabaseClient.auth.signInWithPassword({
-
-        email:usernameEmail(username),
-
-        password:password
-
-      });
-
-
-    if(error){
-
-      console.error(
-        "Login error:",
-        error
+    const data=
+      await managerAction(
+        "login",
+        code,
+        {}
       );
 
 
-      showMessage(
-        "authMessage",
-        "Incorrect username or password."
+    const result=
+      responseData(data);
+
+
+    const manager=
+      result.manager ||
+      result.account ||
+      result;
+
+
+    const squad=
+      result.squad ||
+      result.team ||
+      null;
+
+
+    if(
+      !manager ||
+      !(
+        manager.id ||
+        manager.manager_code
+      )
+    ){
+
+      throw new Error(
+        "Invalid manager code."
       );
 
-      return;
     }
 
 
-    currentUser=data.user;
+    currentUser=
+      manager;
+
+    currentProfile=
+      manager;
+
+    currentSquad=
+      squad;
+
+
+    localStorage.setItem(
+      MANAGER_CODE_STORAGE,
+      code
+    );
+
 
     await loadUser();
 
@@ -1885,14 +1948,15 @@ async function loginManager(){
   }catch(error){
 
     console.error(
-      "Login exception:",
+      "Manager login error:",
       error
     );
 
 
     showMessage(
       "authMessage",
-      "Login failed."
+      error.message ||
+      "Invalid manager code."
     );
 
   }
@@ -1904,14 +1968,19 @@ async function loginManager(){
    LOGOUT
 ========================================================= */
 
-async function logoutManager(){
+function logoutManager(){
 
-  await supabaseClient.auth.signOut();
+  localStorage.removeItem(
+    MANAGER_CODE_STORAGE
+  );
+
 
   currentUser=null;
   currentProfile=null;
   currentSquad=null;
+  allPlayers=[];
   squadPlayers=[];
+  currentGameweek=null;
 
 
   document
@@ -1924,7 +1993,11 @@ async function logoutManager(){
     .classList.remove("hidden");
 
 
-  showAuth("login");
+  /*
+    Restore the normal setup screen.
+  */
+
+  location.reload();
 
 }
 
@@ -1938,140 +2011,141 @@ async function loadUser(){
   if(!currentUser)return;
 
 
-  const {
-    data:profile,
-    error:profileError
-  }=
-    await supabaseClient
-      .from("profiles")
-      .select("*")
-      .eq("id",currentUser.id)
-      .maybeSingle();
+  try{
+
+    /*
+      If we don't already have the squad,
+      ask the RPC for it.
+    */
+
+    if(!currentSquad){
+
+      const data=
+        await managerAction(
+          "load_squad",
+          getManagerCode(),
+          {}
+        );
 
 
-  if(profileError){
-
-    console.error(
-      "Profile loading error:",
-      profileError
-    );
-
-  }
+      const result=
+        responseData(data);
 
 
-  currentProfile=profile;
-
-
-  const {
-    data:squad,
-    error:squadError
-  }=
-    await supabaseClient
-      .from("squads")
-      .select("*")
-      .eq("user_id",currentUser.id)
-      .maybeSingle();
-
-
-  if(squadError){
-
-    console.error(
-      "Squad loading error:",
-      squadError
-    );
-
-  }
-
-
-  currentSquad=squad;
-
-
-  if(!currentSquad){
-
-    const {
-      data:newSquad,
-      error:newSquadError
-    }=
-      await supabaseClient
-        .from("squads")
-        .insert({
-
-          user_id:currentUser.id,
-
-          name:
-            (currentProfile?.username || "My Team")
-            +" FC",
-
-          budget:55
-
-        })
-        .select()
-        .single();
-
-
-    if(newSquadError){
-
-      console.error(
-        newSquadError
-      );
-
-    }else{
-
-      currentSquad=newSquad;
+      currentSquad=
+        result.squad ||
+        result.team ||
+        result;
 
     }
 
+
+    await loadPlayers();
+
+    await loadSquadPlayers();
+
+    await loadGameweek();
+
+    await loadAdminStatus();
+
+
+    document
+      .getElementById("setupPage")
+      .classList.add("hidden");
+
+
+    document
+      .getElementById("app")
+      .classList.remove("hidden");
+
+
+    const displayName=
+      currentUser.manager_name ||
+      currentUser.display_name ||
+      currentUser.username ||
+      "Manager";
+
+
+    document
+      .getElementById("topUsername")
+      .textContent=
+        displayName;
+
+
+    document
+      .getElementById("homeTeamName")
+      .textContent=
+        currentSquad?.name ||
+        "My Team";
+
+
+    document
+      .getElementById("teamTitle")
+      .textContent=
+        currentSquad?.name ||
+        "My Team";
+
+
+    document
+      .getElementById("welcomeText")
+      .textContent=
+        `Welcome back, ${displayName}.`;
+
+
+    renderEverything();
+
+
+  }catch(error){
+
+    console.error(
+      "Load user error:",
+      error
+    );
+
+
+    localStorage.removeItem(
+      MANAGER_CODE_STORAGE
+    );
+
+
+    currentUser=null;
+    currentProfile=null;
+    currentSquad=null;
+
+
+    document
+      .getElementById("app")
+      .classList.add("hidden");
+
+
+    document
+      .getElementById("setupPage")
+      .classList.remove("hidden");
+
+
+    showAuth("login");
+
+
+    showMessage(
+      "authMessage",
+      error.message ||
+      "Your manager session could not be loaded."
+    );
+
   }
 
-
-  await loadPlayers();
-
-  await loadSquadPlayers();
-
-  await loadGameweek();
-
-  await loadAdminStatus();
+}
 
 
-  document
-    .getElementById("setupPage")
-    .classList.add("hidden");
+/* =========================================================
+   MANAGER CODE
+========================================================= */
 
+function getManagerCode(){
 
-  document
-    .getElementById("app")
-    .classList.remove("hidden");
-
-
-  document
-    .getElementById("topUsername")
-    .textContent=
-      currentProfile?.username ||
-      normalizeUsername(
-        currentUser.email?.split("@")[0]
-      );
-
-
-  document
-    .getElementById("homeTeamName")
-    .textContent=
-      currentSquad?.name || "My Team";
-
-
-  document
-    .getElementById("teamTitle")
-    .textContent=
-      currentSquad?.name || "My Team";
-
-
-  document
-    .getElementById("welcomeText")
-    .textContent=
-      `Welcome back, ${
-        currentProfile?.username || "manager"
-      }.`;
-
-  renderEverything();
+  return localStorage.getItem(
+    MANAGER_CODE_STORAGE
+  );
 
 }
 
@@ -2082,41 +2156,64 @@ async function loadUser(){
 
 async function loadGameweek(){
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient
-      .from("gameweeks")
-      .select("*")
-      .eq("is_current",true)
-      .order("id",{ascending:true})
-      .limit(1)
-      .maybeSingle();
+  try{
+
+    const data=
+      await managerAction(
+        "gameweek",
+        getManagerCode(),
+        {}
+      );
 
 
-  if(error){
-
-    console.error(error);
-
-  }
+    const result=
+      responseData(data);
 
 
-  currentGameweek=
-    data || {
+    currentGameweek=
+      result.gameweek ||
+      result;
+
+
+    if(
+      !currentGameweek ||
+      !currentGameweek.id
+    ){
+
+      currentGameweek={
+        id:1,
+        name:"Gameweek 1"
+      };
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "Gameweek error:",
+      error
+    );
+
+
+    currentGameweek={
       id:1,
       name:"Gameweek 1"
     };
 
+  }
+
 
   const number=
     currentGameweek.name
-      ?.replace(/\D/g,"") || "1";
+      ?.replace(/\D/g,"") ||
+    "1";
 
 
   document
     .getElementById("homeGW")
-    .textContent=number;
+    .textContent=
+      number;
 
 }
 
@@ -2127,29 +2224,43 @@ async function loadGameweek(){
 
 async function loadPlayers(){
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient
-      .from("players")
-      .select("*")
-      .order("name",{ascending:true});
+  try{
+
+    const data=
+      await managerAction(
+        "players",
+        getManagerCode(),
+        {}
+      );
 
 
-  if(error){
+    const result=
+      responseData(data);
 
-    console.error(error);
+
+    allPlayers=
+      result.players ||
+      result.data ||
+      (
+        Array.isArray(result)
+        ? result
+        : []
+      );
+
+
+    populateTeamFilter();
+
+
+  }catch(error){
+
+    console.error(
+      "Players error:",
+      error
+    );
 
     allPlayers=[];
 
-    return;
   }
-
-
-  allPlayers=data || [];
-
-  populateTeamFilter();
 
 }
 
@@ -2165,35 +2276,47 @@ async function loadSquadPlayers(){
     squadPlayers=[];
 
     return;
+
   }
 
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient
-      .from("squad_players")
-      .select(`
-        id,
-        squad_id,
-        player_id,
-        is_starter,
-        bench_order,
-        players(*)
-      `)
-      .eq("squad_id",currentSquad.id);
+  try{
+
+    const data=
+      await managerAction(
+        "load_squad",
+        getManagerCode(),
+        {}
+      );
 
 
-  if(error){
+    const result=
+      responseData(data);
 
-    console.error(error);
+
+    if(result.squad){
+
+      currentSquad=
+        result.squad;
+
+    }
+
+
+    squadPlayers=
+      result.players ||
+      result.squad_players ||
+      result.squadPlayers ||
+      [];
+
+
+  }catch(error){
+
+    console.error(
+      "Squad players error:",
+      error
+    );
 
     squadPlayers=[];
-
-  }else{
-
-    squadPlayers=data || [];
 
   }
 
@@ -2209,19 +2332,8 @@ async function loadAdminStatus(){
   if(!currentUser)return;
 
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient
-      .from("admin_users")
-      .select("user_id")
-      .eq("user_id",currentUser.id)
-      .maybeSingle();
-
-
   const isAdmin=
-    !!data && !error;
+    currentUser.is_admin===true;
 
 
   document
@@ -2255,7 +2367,9 @@ function showPage(page){
 
 
   const pageEl=
-    document.getElementById(page+"Page");
+    document.getElementById(
+      page+"Page"
+    );
 
 
   if(pageEl){
@@ -2293,7 +2407,13 @@ function showPage(page){
 
 
   if(page==="admin"){
-    renderAdminPlayers();
+
+    if(currentUser?.is_admin){
+
+      renderAdminPlayers();
+
+    }
+
   }
 
 
@@ -2347,7 +2467,11 @@ function calculateSquadValue(){
   return squadPlayers.reduce(
     (total,item)=>
       total+
-      Number(item.players?.price||0),
+      Number(
+        item.players?.price ||
+        item.player?.price ||
+        0
+      ),
     0
   );
 
@@ -2366,7 +2490,11 @@ function calculateTotalPoints(){
   return squadPlayers.reduce(
     (total,item)=>
       total+
-      Number(item.players?.total_points||0),
+      Number(
+        item.players?.total_points ||
+        item.player?.total_points ||
+        0
+      ),
     0
   );
 
@@ -2406,14 +2534,31 @@ function renderHomeStats(){
 
 
 /* =========================================================
+   PLAYER OBJECT HELPER
+========================================================= */
+
+function getPlayerFromSquadItem(item){
+
+  return (
+    item?.players ||
+    item?.player ||
+    null
+  );
+
+}
+
+
+/* =========================================================
    TEAM RENDER
 ========================================================= */
 
 function playerCard(item){
 
-  if(!item || !item.players)return "";
+  const p=
+    getPlayerFromSquadItem(item);
 
-  const p=item.players;
+
+  if(!item || !p)return "";
 
 
   const isCaptain=
@@ -2485,25 +2630,25 @@ function renderTeam(){
 
   const gk=
     starters.filter(
-      x=>x.players?.position==="GK"
+      x=>getPlayerFromSquadItem(x)?.position==="GK"
     );
 
 
   const def=
     starters.filter(
-      x=>x.players?.position==="DEF"
+      x=>getPlayerFromSquadItem(x)?.position==="DEF"
     );
 
 
   const mid=
     starters.filter(
-      x=>x.players?.position==="MID"
+      x=>getPlayerFromSquadItem(x)?.position==="MID"
     );
 
 
   const fwd=
     starters.filter(
-      x=>x.players?.position==="FWD"
+      x=>getPlayerFromSquadItem(x)?.position==="FWD"
     );
 
 
@@ -2595,7 +2740,11 @@ function renderTeam(){
 
 function benchPlayer(item){
 
-  const p=item.players;
+  const p=
+    getPlayerFromSquadItem(item);
+
+
+  if(!p)return "";
 
 
   return `
@@ -2631,7 +2780,11 @@ function benchPlayer(item){
 
 function squadListItem(item){
 
-  const p=item.players;
+  const p=
+    getPlayerFromSquadItem(item);
+
+
+  if(!p)return "";
 
 
   return `
@@ -2725,7 +2878,9 @@ function renderPlayers(){
 
     if(
       search &&
-      !p.name.toLowerCase().includes(search)
+      !String(p.name||"")
+        .toLowerCase()
+        .includes(search)
     ){
 
       return false;
@@ -2774,7 +2929,10 @@ function renderPlayers(){
 
     players.sort(
       (a,b)=>
-        a.name.localeCompare(b.name)
+        String(a.name||"")
+          .localeCompare(
+            String(b.name||"")
+          )
     );
 
   }
@@ -2838,7 +2996,9 @@ function populateTeamFilter(){
 
 
   const select=
-    document.getElementById("transferTeam");
+    document.getElementById(
+      "transferTeam"
+    );
 
 
   if(!select)return;
@@ -2862,7 +3022,9 @@ function populateTeamFilter(){
 function renderTransferPlayers(){
 
   const container=
-    document.getElementById("transferPlayers");
+    document.getElementById(
+      "transferPlayers"
+    );
 
 
   if(!container)return;
@@ -2896,7 +3058,9 @@ function renderTransferPlayers(){
 
       if(
         search &&
-        !p.name.toLowerCase().includes(search)
+        !String(p.name||"")
+          .toLowerCase()
+          .includes(search)
       ){
 
         return false;
@@ -2927,6 +3091,18 @@ function renderTransferPlayers(){
       return true;
 
     });
+
+
+  if(!players.length){
+
+    container.innerHTML=
+      `<p style="color:var(--muted);padding:15px">
+        No players found.
+      </p>`;
+
+    return;
+
+  }
 
 
   container.innerHTML=
@@ -3103,35 +3279,38 @@ async function addPlayer(playerId){
       ).length+1;
 
 
-  const {error}=
-    await supabaseClient
-      .from("squad_players")
-      .insert({
+  try{
 
-        squad_id:currentSquad.id,
-
+    await managerAction(
+      "add_player",
+      getManagerCode(),
+      {
         player_id:playerId,
-
         is_starter:isStarter,
-
         bench_order:benchOrder
+      }
+    );
 
-      });
+
+    await loadSquadPlayers();
+
+    renderEverything();
 
 
-  if(error){
+  }catch(error){
 
-    console.error(error);
+    console.error(
+      "Add player error:",
+      error
+    );
 
-    alert(error.message);
 
-    return;
+    alert(
+      error.message ||
+      "Could not add player."
+    );
+
   }
-
-
-  await loadSquadPlayers();
-
-  renderEverything();
 
 }
 
@@ -3145,33 +3324,36 @@ async function removePlayer(playerId){
   if(!currentSquad)return;
 
 
-  const {error}=
-    await supabaseClient
-      .from("squad_players")
-      .delete()
-      .eq(
-        "squad_id",
-        currentSquad.id
-      )
-      .eq(
-        "player_id",
-        playerId
-      );
+  try{
+
+    await managerAction(
+      "remove_player",
+      getManagerCode(),
+      {
+        player_id:playerId
+      }
+    );
 
 
-  if(error){
+    await loadSquadPlayers();
 
-    console.error(error);
+    renderEverything();
 
-    alert(error.message);
 
-    return;
+  }catch(error){
+
+    console.error(
+      "Remove player error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "Could not remove player."
+    );
+
   }
-
-
-  await loadSquadPlayers();
-
-  renderEverything();
 
 }
 
@@ -3199,65 +3381,64 @@ async function createLeague(){
   }
 
 
-  const code=
-    Math.random()
-      .toString(36)
-      .substring(2,8)
-      .toUpperCase();
+  try{
+
+    const data=
+      await managerAction(
+        "create_league",
+        getManagerCode(),
+        {
+          name:name
+        }
+      );
 
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient
-      .from("leagues")
-      .insert({
-
-        name,
-
-        join_code:code,
-
-        created_by:currentUser.id
-
-      })
-      .select()
-      .single();
+    const result=
+      responseData(data);
 
 
-  if(error){
+    const code=
+      result.join_code ||
+      result.code ||
+      result.league?.join_code;
 
-    alert(error.message);
 
-    return;
+    document
+      .getElementById("leagueName")
+      .value="";
+
+
+    await loadLeagues();
+
+
+    alert(
+      code
+      ? `League created!\nJoin code: ${code}`
+      : "League created!"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Create league error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "Could not create league."
+    );
+
   }
-
-
-  await supabaseClient
-    .from("league_members")
-    .insert({
-
-      league_id:data.id,
-
-      user_id:currentUser.id
-
-    });
-
-
-  document
-    .getElementById("leagueName")
-    .value="";
-
-
-  await loadLeagues();
-
-
-  alert(
-    `League created!\nJoin code: ${code}`
-  );
 
 }
 
+
+/* =========================================================
+   JOIN LEAGUE
+========================================================= */
 
 async function joinLeague(){
 
@@ -3279,42 +3460,47 @@ async function joinLeague(){
   }
 
 
-  const {
-    data:league,
-    error
-  }=
-    await supabaseClient
-      .from("leagues")
-      .select("*")
-      .eq("join_code",code)
-      .maybeSingle();
+  try{
 
-
-  if(error || !league){
-
-    alert(
-      "League not found."
+    await managerAction(
+      "join_league",
+      getManagerCode(),
+      {
+        join_code:code
+      }
     );
 
-    return;
-  }
+
+    document
+      .getElementById("joinCode")
+      .value="";
 
 
-  const {error:joinError}=
-    await supabaseClient
-      .from("league_members")
-      .insert({
-
-        league_id:league.id,
-
-        user_id:currentUser.id
-
-      });
+    await loadLeagues();
 
 
-  if(joinError){
+    alert(
+      "Joined league!"
+    );
 
-    if(joinError.code==="23505"){
+
+  }catch(error){
+
+    console.error(
+      "Join league error:",
+      error
+    );
+
+
+    const text=
+      String(error.message||"")
+        .toLowerCase();
+
+
+    if(
+      text.includes("duplicate") ||
+      text.includes("already")
+    ){
 
       alert(
         "You are already in this league."
@@ -3323,29 +3509,20 @@ async function joinLeague(){
     }else{
 
       alert(
-        joinError.message
+        error.message ||
+        "League not found."
       );
 
     }
 
-    return;
   }
-
-
-  document
-    .getElementById("joinCode")
-    .value="";
-
-
-  await loadLeagues();
-
-
-  alert(
-    "Joined league!"
-  );
 
 }
 
+
+/* =========================================================
+   LOAD LEAGUES
+========================================================= */
 
 async function loadLeagues(){
 
@@ -3353,144 +3530,195 @@ async function loadLeagues(){
 
 
   const list=
-    document.getElementById("leagueList");
+    document.getElementById(
+      "leagueList"
+    );
 
 
   if(!list)return;
 
 
-  const {
-    data:members,
-    error
-  }=
-    await supabaseClient
-      .from("league_members")
-      .select(`
-        league_id,
-        leagues(*)
-      `)
-      .eq(
-        "user_id",
-        currentUser.id
+  try{
+
+    const data=
+      await managerAction(
+        "load_leagues",
+        getManagerCode(),
+        {}
       );
 
 
-  if(error){
+    const result=
+      responseData(data);
+
+
+    const members=
+      result.leagues ||
+      result.members ||
+      (
+        Array.isArray(result)
+        ? result
+        : []
+      );
+
+
+    if(!members.length){
+
+      list.innerHTML=
+        `<p style="color:var(--muted)">
+          You haven't joined any leagues yet.
+        </p>`;
+
+      return;
+
+    }
+
+
+    list.innerHTML=
+      members.map(member=>{
+
+        const league=
+          member.league ||
+          member.leagues ||
+          member;
+
+
+        if(!league)return "";
+
+
+        return `
+
+          <div class="league-row">
+
+            <div>
+
+              <strong>
+                ${escapeHtml(league.name)}
+              </strong>
+
+              <br>
+
+              <small style="color:var(--muted)">
+                Code:
+                ${escapeHtml(league.join_code||"")}
+              </small>
+
+            </div>
+
+            <div class="rank">
+              —
+            </div>
+
+            <button
+              class="btn btn-secondary btn-small"
+              onclick="viewLeague(${league.id})">
+
+              View
+
+            </button>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Load leagues error:",
+      error
+    );
+
 
     list.innerHTML=
       `<p style="color:var(--muted)">
         Unable to load leagues.
       </p>`;
 
-    return;
   }
-
-
-  if(!members || !members.length){
-
-    list.innerHTML=
-      `<p style="color:var(--muted)">
-        You haven't joined any leagues yet.
-      </p>`;
-
-    return;
-  }
-
-
-  list.innerHTML=
-    members.map(member=>{
-
-      const league=
-        member.leagues;
-
-
-      return `
-
-        <div class="league-row">
-
-          <div>
-
-            <strong>
-              ${escapeHtml(league.name)}
-            </strong>
-
-            <br>
-
-            <small style="color:var(--muted)">
-              Code:
-              ${escapeHtml(league.join_code)}
-            </small>
-
-          </div>
-
-          <div class="rank">
-            —
-          </div>
-
-          <button
-            class="btn btn-secondary btn-small"
-            onclick="viewLeague(${league.id})">
-
-            View
-
-          </button>
-
-        </div>
-
-      `;
-
-    }).join("");
 
 }
 
 
+/* =========================================================
+   VIEW LEAGUE
+========================================================= */
+
 async function viewLeague(leagueId){
 
-  const {
-    data:members,
-    error
-  }=
-    await supabaseClient
-      .from("league_members")
-      .select(`
-        user_id,
-        profiles(username,display_name)
-      `)
-      .eq(
-        "league_id",
-        leagueId
+  try{
+
+    const data=
+      await managerAction(
+        "view_league",
+        getManagerCode(),
+        {
+          league_id:leagueId
+        }
       );
 
 
-  if(error){
+    const result=
+      responseData(data);
 
-    alert(error.message);
 
-    return;
+    const members=
+      result.members ||
+      result.league_members ||
+      (
+        Array.isArray(result)
+        ? result
+        : []
+      );
+
+
+    let message=
+      "League Members\n\n";
+
+
+    members.forEach(
+      (member,index)=>{
+
+        const manager=
+          member.manager ||
+          member.manager_account ||
+          member;
+
+
+        const name=
+          manager?.manager_name ||
+          manager?.display_name ||
+          manager?.username ||
+          member.manager_name ||
+          "Manager";
+
+
+        message+=
+          `${index+1}. ${name}\n`;
+
+      }
+    );
+
+
+    alert(message);
+
+
+  }catch(error){
+
+    console.error(
+      "View league error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "Could not load league."
+    );
+
   }
-
-
-  let message=
-    "League Members\n\n";
-
-
-  (members||[]).forEach(
-    (member,index)=>{
-
-      const name=
-        member.profiles?.display_name ||
-        member.profiles?.username ||
-        "Manager";
-
-
-      message+=
-        `${index+1}. ${name}\n`;
-
-    }
-  );
-
-
-  alert(message);
 
 }
 
@@ -3502,80 +3730,117 @@ async function viewLeague(leagueId){
 async function renderAdminPlayers(){
 
   const container=
-    document.getElementById("adminPlayers");
+    document.getElementById(
+      "adminPlayers"
+    );
 
 
   if(!container)return;
 
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient
-      .from("players")
-      .select("*")
-      .order("name");
+  if(!currentUser?.is_admin){
+
+    container.innerHTML=
+      `<p style="color:var(--muted)">
+        Admin access required.
+      </p>`;
+
+    return;
+
+  }
 
 
-  if(error){
+  try{
+
+    const data=
+      await managerAction(
+        "admin_players",
+        getManagerCode(),
+        {}
+      );
+
+
+    const result=
+      responseData(data);
+
+
+    const players=
+      result.players ||
+      result.data ||
+      (
+        Array.isArray(result)
+        ? result
+        : []
+      );
+
+
+    container.innerHTML=
+      players.map(p=>`
+
+        <div class="admin-player">
+
+          <div>
+
+            <strong>
+              ${escapeHtml(p.name)}
+            </strong>
+
+            <br>
+
+            <small style="color:var(--muted)">
+
+              ${escapeHtml(p.position)}
+              ·
+              ${escapeHtml(p.team)}
+              ·
+              £${Number(p.price).toFixed(1)}m
+
+            </small>
+
+          </div>
+
+          <button
+            class="btn btn-secondary btn-small"
+            onclick="adminEditPlayer(${p.id})">
+
+            Edit
+
+          </button>
+
+          <button
+            class="btn btn-danger btn-small"
+            onclick="adminDeletePlayer(${p.id})">
+
+            Delete
+
+          </button>
+
+        </div>
+
+      `).join("");
+
+
+  }catch(error){
+
+    console.error(
+      "Admin player load error:",
+      error
+    );
+
 
     container.innerHTML=
       `<p style="color:var(--red)">
         ${escapeHtml(error.message)}
       </p>`;
 
-    return;
   }
-
-
-  container.innerHTML=
-    (data||[]).map(p=>`
-
-      <div class="admin-player">
-
-        <div>
-
-          <strong>
-            ${escapeHtml(p.name)}
-          </strong>
-
-          <br>
-
-          <small style="color:var(--muted)">
-
-            ${escapeHtml(p.position)}
-            ·
-            ${escapeHtml(p.team)}
-            ·
-            £${Number(p.price).toFixed(1)}m
-
-          </small>
-
-        </div>
-
-        <button
-          class="btn btn-secondary btn-small"
-          onclick="adminEditPlayer(${p.id})">
-
-          Edit
-
-        </button>
-
-        <button
-          class="btn btn-danger btn-small"
-          onclick="adminDeletePlayer(${p.id})">
-
-          Delete
-
-        </button>
-
-      </div>
-
-    `).join("");
 
 }
 
+
+/* =========================================================
+   ADMIN ADD PLAYER
+========================================================= */
 
 async function adminAddPlayer(){
 
@@ -3624,73 +3889,74 @@ async function adminAddPlayer(){
   }
 
 
-  const {error}=
-    await supabaseClient
-      .from("players")
-      .insert({
+  try{
 
+    await managerAction(
+      "admin_add_player",
+      getManagerCode(),
+      {
         name,
-
         position,
-
         team,
-
         price,
-
-        available,
-
-        total_points:0,
-
-        form:0,
-
-        ownership:0
-
-      });
+        available
+      }
+    );
 
 
-  if(error){
+    document
+      .getElementById("adminName")
+      .value="";
+
+
+    document
+      .getElementById("adminTeam")
+      .value="";
+
+
+    document
+      .getElementById("adminPrice")
+      .value="5";
+
 
     showMessage(
       "adminMessage",
-      error.message
+      "Player added successfully.",
+      "success"
     );
 
-    return;
+
+    await loadPlayers();
+
+    await renderAdminPlayers();
+
+    renderPlayers();
+
+    renderTransferPlayers();
+
+
+  }catch(error){
+
+    console.error(
+      "Admin add error:",
+      error
+    );
+
+
+    showMessage(
+      "adminMessage",
+      error.message ||
+      "Could not add player."
+    );
+
   }
-
-
-  document
-    .getElementById("adminName")
-    .value="";
-
-
-  document
-    .getElementById("adminTeam")
-    .value="";
-
-
-  document
-    .getElementById("adminPrice")
-    .value="5";
-
-
-  showMessage(
-    "adminMessage",
-    "Player added successfully.",
-    "success"
-  );
-
-
-  await loadPlayers();
-
-  await renderAdminPlayers();
-
-  renderPlayers();
-
-  renderTransferPlayers();
 
 }
 
+
+/* =========================================================
+   ADMIN EDIT PLAYER
+========================================================= */
 
 async function adminEditPlayer(id){
 
@@ -3739,37 +4005,49 @@ async function adminEditPlayer(id){
   }
 
 
-  const {error}=
-    await supabaseClient
-      .from("players")
-      .update({
+  try{
 
+    await managerAction(
+      "admin_edit_player",
+      getManagerCode(),
+      {
+        player_id:id,
         name:name.trim(),
-
         price
+      }
+    );
 
-      })
-      .eq("id",id);
+
+    await loadPlayers();
+
+    await renderAdminPlayers();
+
+    renderPlayers();
+
+    renderTransferPlayers();
 
 
-  if(error){
+  }catch(error){
 
-    alert(error.message);
+    console.error(
+      "Admin edit error:",
+      error
+    );
 
-    return;
+
+    alert(
+      error.message ||
+      "Could not edit player."
+    );
+
   }
-
-
-  await loadPlayers();
-
-  await renderAdminPlayers();
-
-  renderPlayers();
-
-  renderTransferPlayers();
 
 }
 
+
+/* =========================================================
+   ADMIN DELETE PLAYER
+========================================================= */
 
 async function adminDeletePlayer(id){
 
@@ -3795,60 +4073,150 @@ async function adminDeletePlayer(id){
   }
 
 
-  const {error}=
-    await supabaseClient
-      .from("players")
-      .delete()
-      .eq("id",id);
+  try{
+
+    await managerAction(
+      "admin_delete_player",
+      getManagerCode(),
+      {
+        player_id:id
+      }
+    );
 
 
-  if(error){
+    await loadPlayers();
 
-    alert(error.message);
+    await renderAdminPlayers();
 
-    return;
+    renderPlayers();
+
+    renderTransferPlayers();
+
+
+  }catch(error){
+
+    console.error(
+      "Admin delete error:",
+      error
+    );
+
+
+    alert(
+      error.message ||
+      "Could not delete player."
+    );
+
   }
-
-
-  await loadPlayers();
-
-  await renderAdminPlayers();
-
-  renderPlayers();
-
-  renderTransferPlayers();
 
 }
 
 
 /* =========================================================
-   SESSION START
+   INITIALISE
 ========================================================= */
 
 async function initialise(){
 
-  const {
-    data,
-    error
-  }=
-    await supabaseClient.auth.getSession();
-
-
-  if(error){
-
-    console.error(
-      "Session error:",
-      error
+  const savedCode=
+    localStorage.getItem(
+      MANAGER_CODE_STORAGE
     );
+
+
+  /*
+    No saved code = show manager-code screen.
+  */
+
+  if(!savedCode){
+
+    document
+      .getElementById("setupPage")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("app")
+      .classList.add("hidden");
+
+    return;
 
   }
 
 
-  const session=
-    data?.session;
+  /*
+    Saved code = automatically attempt login.
+  */
+
+  try{
+
+    const data=
+      await managerAction(
+        "login",
+        savedCode,
+        {}
+      );
 
 
-  if(!session){
+    const result=
+      responseData(data);
+
+
+    const manager=
+      result.manager ||
+      result.account ||
+      result;
+
+
+    const squad=
+      result.squad ||
+      result.team ||
+      null;
+
+
+    if(
+      !manager ||
+      !(
+        manager.id ||
+        manager.manager_code
+      )
+    ){
+
+      throw new Error(
+        "Saved manager code is no longer valid."
+      );
+
+    }
+
+
+    currentUser=
+      manager;
+
+    currentProfile=
+      manager;
+
+    currentSquad=
+      squad;
+
+
+    await loadUser();
+
+
+  }catch(error){
+
+    console.error(
+      "Automatic login failed:",
+      error
+    );
+
+
+    localStorage.removeItem(
+      MANAGER_CODE_STORAGE
+    );
+
+
+    currentUser=null;
+    currentProfile=null;
+    currentSquad=null;
+
 
     document
       .getElementById("setupPage")
@@ -3860,62 +4228,11 @@ async function initialise(){
       .classList.add("hidden");
 
 
-    return;
+    showAuth("login");
+
   }
-
-
-  if(session.user?.is_anonymous){
-
-    await supabaseClient.auth.signOut();
-
-
-    document
-      .getElementById("setupPage")
-      .classList.remove("hidden");
-
-
-    return;
-  }
-
-
-  currentUser=
-    session.user;
-
-
-  await loadUser();
 
 }
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-supabaseClient.auth.onAuthStateChange(
-  async(event,session)=>{
-
-    if(event==="SIGNED_OUT"){
-
-      currentUser=null;
-
-      return;
-
-    }
-
-
-    if(
-      event==="SIGNED_IN" &&
-      session &&
-      !session.user.is_anonymous
-    ){
-
-      currentUser=
-        session.user;
-
-    }
-
-  }
-);
 
 
 /* =========================================================
