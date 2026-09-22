@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fantasy Football</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, #102b3b 0%, #061018 45%, #020509 100%);
+      color: #e8fbff;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(100, 230, 255, 0.15);
+      background: rgba(0, 0, 0, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #7eeaff;
+    }
+
+    .user-area {
+      font-size: 13px;
+      color: #9fb8c0;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #d9f8ff;
+    }
+
+    .hero p {
+      color: #91aeb7;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+
+    button {
+      border: 1px solid rgba(100, 230, 255, 0.35);
+      background: rgba(20, 50, 65, 0.7);
+      color: #d9f8ff;
+      padding: 11px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: rgba(40, 100, 120, 0.8);
+    }
+
+    .card {
+      background: rgba(5, 18, 25, 0.8);
+      border: 1px solid rgba(100, 230, 255, 0.15);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-bottom: 15px;
+      color: #9defff;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      background: rgba(20, 45, 55, 0.55);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 25px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #8faab2;
+    }
+
+    .pitch {
+      min-height: 500px;
+      border-radius: 16px;
+      padding: 30px 15px;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(25, 110, 75, 0.45),
+          rgba(20, 130, 80, 0.3)
+        );
+      border: 2px solid rgba(120, 255, 180, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .pitch-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .player {
+      width: 110px;
+      padding: 10px;
+      text-align: center;
+      background: rgba(2, 15, 20, 0.9);
+      border: 1px solid rgba(120, 240, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .player-name {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .player-position {
+      font-size: 11px;
+      color: #7fdbea;
+      margin: 4px 0;
+    }
+
+    .player-points {
+      font-size: 12px;
+      color: #9fb5bc;
+    }
+
+    .auth {
+      max-width: 420px;
+      margin: 30px auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border-radius: 8px;
+      border: 1px solid rgba(100, 230, 255, 0.25);
+      background: #07131a;
+      color: white;
+      outline: none;
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .auth-buttons button {
+      flex: 1;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #9fb5bc;
+    }
+
+    .player-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .player-table th,
+    .player-table td {
+      text-align: left;
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(100, 230, 255, 0.1);
+    }
+
+    .player-table th {
+      color: #7fdbea;
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 15px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .player-table {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">FANTASY FC</div>
+  <div class="user-area" id="userArea">Not logged in</div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Fantasy Football</h1>
+    <p>Your local fantasy football game</p>
+  </section>
+
+  <div class="nav">
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('team')">My Team</button>
+    <button onclick="showPage('players')">Players</button>
+    <button onclick="showPage('league')">League</button>
+    <button onclick="showPage('auth')">Account</button>
+  </div>
+
+  <!-- HOME -->
+
+  <section id="home" class="page">
+
+    <div class="card">
+      <h2>Gameweek 1</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">£55.0m</div>
+          <div class="stat-label">Starting Budget</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">33</div>
+          <div class="stat-label">Players Available</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Your Points</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">League Position</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Scoring</h2>
+
+      <div class="stats">
+        <div class="stat">Appearance<br><b>+1</b></div>
+        <div class="stat">60+ Minutes<br><b>+1</b></div>
+        <div class="stat">Goal<br><b>+4 to +10</b></div>
+        <div class="stat">Assist<br><b>+3</b></div>
+        <div class="stat">Clean Sheet<br><b>+1 to +4</b></div>
+        <div class="stat">Yellow Card<br><b>-1</b></div>
+        <div class="stat">Red Card<br><b>-3</b></div>
+        <div class="stat">Own Goal<br><b>-2</b></div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- MY TEAM -->
+
+  <section id="team" class="page hidden">
+
+    <div class="card">
+      <h2>My Team</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">£55.0m</div>
+          <div class="stat-label">Budget</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">£0.0m</div>
+          <div class="stat-label">Squad Value</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Total Points</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="pitch">
+
+        <div class="pitch-row">
+          <div class="player">
+            <div class="player-name">GK</div>
+            <div class="player-position">Goalkeeper</div>
+            <div class="player-points">Select player</div>
+          </div>
+        </div>
+
+        <div class="pitch-row">
+          <div class="player">
+            <div class="player-name">DEF</div>
+            <div class="player-position">Defender</div>
+            <div class="player-points">Select player</div>
+          </div>
+
+          <div class="player">
+            <div class="player-name">DEF</div>
+            <div class="player-position">Defender</div>
+            <div class="player-points">Select player</div>
+          </div>
+
+          <div class="player">
+            <div class="player-name">DEF</div>
+            <div class="player-position">Defender</div>
+            <div class="player-points">Select player</div>
+          </div>
+        </div>
+
+        <div class="pitch-row">
+          <div class="player">
+            <div class="player-name">MID</div>
+            <div class="player-position">Midfielder</div>
+            <div class="player-points">Select player</div>
+          </div>
+
+          <div class="player">
+            <div class="player-name">MID</div>
+            <div class="player-position">Midfielder</div>
+            <div class="player-points">Select player</div>
+          </div>
+        </div>
+
+        <div class="pitch-row">
+          <div class="player">
+            <div class="player-name">FWD</div>
+            <div class="player-position">Forward</div>
+            <div class="player-points">Select player</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- PLAYERS -->
+
+  <section id="players" class="page hidden">
+
+    <div class="card">
+      <h2>Players</h2>
+
+      <input
+        type="text"
+        id="playerSearch"
+        placeholder="Search players..."
+        oninput="filterPlayers()"
+      >
+
+      <div style="overflow-x:auto; margin-top:15px;">
+
+        <table class="player-table">
+
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Team</th>
+              <th>Price</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+
+          <tbody id="playersTable">
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- LEAGUE -->
+
+  <section id="league" class="page hidden">
+
+    <div class="card">
+      <h2>League</h2>
+      <p style="color:#9fb5bc;">
+        League tables will appear here once managers join a league.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- AUTH -->
+
+  <section id="auth" class="page hidden">
+
+    <div class="card auth">
+
+      <h2>Account</h2>
+
+      <p style="color:#9fb5bc; margin-bottom:15px;">
+        Create an account or log in to save your fantasy team online.
+      </p>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Email address"
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Username (for new accounts)"
+      >
+
+      <div class="auth-buttons">
+        <button onclick="signUp()">Create Account</button>
+        <button onclick="signIn()">Log In</button>
+      </div>
+
+      <button
+        onclick="signOut()"
+        style="width:100%; margin-top:10px;"
+      >
+        Log Out
+      </button>
+
+      <div class="message" id="authMessage"></div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+  // ==========================================
+  // SUPABASE CONNECTION
+  // ==========================================
+
+  const SUPABASE_URL = "https://vugochewqgpcawminziw.supabase.co/rest/v1/";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ1Z29jaGV3cWdwY2F3bWlueml3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwODc0NzcsImV4cCI6MjEwNTY2MzQ3N30.T8_8e3UxtvoDf4gtW6jPYUsS86pelW2RKy-1R2jOjDo";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  // ==========================================
+  // PAGE NAVIGATION
+  // ==========================================
+
+  function showPage(pageName) {
+
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.add("hidden");
+    });
+
+    document.getElementById(pageName).classList.remove("hidden");
+
+    if (pageName === "players") {
+      loadPlayers();
+    }
+  }
+
+
+  // ==========================================
+  // LOAD PLAYERS FROM SUPABASE
+  // ==========================================
+
+  let allPlayers = [];
+
+  async function loadPlayers() {
+
+    const table = document.getElementById("playersTable");
+
+    table.innerHTML = `
+      <tr>
+        <td colspan="5">Loading players...</td>
+      </tr>
+    `;
+
+    const { data, error } = await supabaseClient
+      .from("players")
+      .select("*")
+      .order("price", { ascending: false });
+
+    if (error) {
+
+      console.error(error);
+
+      table.innerHTML = `
+        <tr>
+          <td colspan="5">
+            Could not load players.
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+    allPlayers = data || [];
+
+    displayPlayers(allPlayers);
+  }
+
+
+  function displayPlayers(players) {
+
+    const table = document.getElementById("playersTable");
+
+    if (!players.length) {
+
+      table.innerHTML = `
+        <tr>
+          <td colspan="5">No players found.</td>
+        </tr>
+      `;
+
+      return;
+    }
+
+    table.innerHTML = players.map(player => `
+      <tr>
+        <td>${escapeHTML(player.name)}</td>
+        <td>${escapeHTML(player.position)}</td>
+        <td>${escapeHTML(player.team)}</td>
+        <td>£${Number(player.price).toFixed(1)}m</td>
+        <td>${player.total_points}</td>
+      </tr>
+    `).join("");
+  }
+
+
+  function filterPlayers() {
+
+    const search =
+      document.getElementById("playerSearch")
+        .value
+        .toLowerCase();
+
+    const filtered = allPlayers.filter(player =>
+      player.name.toLowerCase().includes(search) ||
+      player.team.toLowerCase().includes(search) ||
+      player.position.toLowerCase().includes(search)
+    );
+
+    displayPlayers(filtered);
+  }
+
+
+  // ==========================================
+  // AUTHENTICATION
+  // ==========================================
+
+  async function signUp() {
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const username =
+      document.getElementById("username").value.trim();
+
+    const message =
+      document.getElementById("authMessage");
+
+    if (!email || !password || !username) {
+
+      message.textContent =
+        "Please fill in all three fields.";
+
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+
+      message.textContent = error.message;
+      return;
+    }
+
+    if (!data.user) {
+
+      message.textContent =
+        "Account created. Check your email to confirm it.";
+
+      return;
+    }
+
+    const { error: profileError } =
+      await supabaseClient
+        .from("profiles")
+        .insert({
+          id: data.user.id,
+          username: username,
+          display_name: username
+        });
+
+    if (profileError) {
+
+      console.error(profileError);
+
+      message.textContent =
+        "Account created, but the profile could not be created.";
+
+      return;
+    }
+
+    message.textContent =
+      "Account created successfully.";
+
+    await createSquad(data.user.id);
+  }
+
+
+  async function signIn() {
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const message =
+      document.getElementById("authMessage");
+
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+
+      message.textContent = error.message;
+      return;
+    }
+
+    message.textContent =
+      "Logged in successfully.";
+
+    await updateUserArea();
+  }
+
+
+  async function signOut() {
+
+    await supabaseClient.auth.signOut();
+
+    document.getElementById("authMessage").textContent =
+      "Logged out.";
+
+    await updateUserArea();
+  }
+
+
+  // ==========================================
+  // CREATE USER SQUAD
+  // ==========================================
+
+  async function createSquad(userId) {
+
+    const { data: existing } =
+      await supabaseClient
+        .from("squads")
+        .select("id")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+    if (existing) return;
+
+    const { error } =
+      await supabaseClient
+        .from("squads")
+        .insert({
+          user_id: userId,
+          name: "My Team",
+          budget: 55.0
+        });
+
+    if (error) {
+      console.error("Squad creation error:", error);
+    }
+  }
+
+
+  // ==========================================
+  // USER STATUS
+  // ==========================================
+
+  async function updateUserArea() {
+
+    const area =
+      document.getElementById("userArea");
+
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+
+      area.textContent = "Not logged in";
+      return;
+    }
+
+    area.textContent =
+      user.email;
+  }
+
+
+  // ==========================================
+  // BASIC SECURITY FOR DISPLAYED TEXT
+  // ==========================================
+
+  function escapeHTML(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  // ==========================================
+  // STARTUP
+  // ==========================================
+
+  updateUserArea();
+
+  showPage("home");
+
+</script>
+
+</body>
+</html>
